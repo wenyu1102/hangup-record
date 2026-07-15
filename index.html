@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f7fb" />
+    <title>挂起记录</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <img class="brand-icon" src="assets/hangup-record-icon.svg" alt="挂起记录图标" />
+          <div>
+            <div class="brand-name">挂起记录</div>
+            <div class="brand-caption">客服工作时长管理</div>
+          </div>
+        </div>
+
+        <nav class="primary-nav" aria-label="主导航">
+          <button class="nav-item is-active" data-view="dashboard"><span>今日工作</span></button>
+          <button class="nav-item" data-view="stats"><span>统计记录</span></button>
+          <button class="nav-item" data-view="settings"><span>设置</span></button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="save-indicator"><span class="save-dot"></span><span id="save-status">已自动保存</span></div>
+          <button class="sidebar-action" id="open-floating">打开悬浮窗</button>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <div class="eyebrow" id="today-weekday">星期二</div>
+            <h1 id="view-title">今日工作</h1>
+          </div>
+          <div class="topbar-actions">
+            <div class="shift-context">
+              <span class="shift-label">今日班次</span>
+              <select class="today-shift-select" id="today-shift-select" aria-label="修改今日班次"></select>
+            </div>
+          </div>
+        </header>
+
+        <section class="view is-visible" id="view-dashboard">
+          <div class="dashboard-grid">
+            <section class="panel progress-panel">
+              <div class="panel-header">
+                <div>
+                  <div class="section-kicker">今日在线进度</div>
+                  <h2 id="status-title">尚未开始记录</h2>
+                </div>
+                <span class="status-badge status-idle" id="status-badge">未开始</span>
+              </div>
+              <div class="progress-stage">
+                <div class="progress-ring" id="progress-ring" style="--progress: 0deg">
+                  <div class="progress-center">
+                    <strong id="progress-percent">0%</strong>
+                    <span>完成率</span>
+                  </div>
+                </div>
+                <div class="progress-copy">
+                  <div class="big-duration" id="online-duration">00:00:00</div>
+                  <div class="muted">有效在线 / <span id="target-duration">07:30:00</span></div>
+                  <div class="progress-note" id="progress-note">开始在线后计入今日进度</div>
+                </div>
+              </div>
+              <div class="control-row">
+                <button class="primary-button" id="primary-action">开始在线</button>
+                <button class="secondary-button" id="finish-action">结束今日记录</button>
+              </div>
+            </section>
+
+            <section class="panel metrics-panel">
+              <div class="panel-header compact">
+                <div>
+                  <div class="section-kicker">实时概览</div>
+                  <h2>今天还剩多少</h2>
+                </div>
+                <span class="live-badge"><span class="live-dot"></span>实时</span>
+              </div>
+              <div class="metric-list">
+                <div class="metric-row">
+                  <span>补时倒计时</span>
+                  <strong id="remaining-duration">07:30:00</strong>
+                  <small id="remaining-label">还需在线</small>
+                </div>
+                <div class="metric-row">
+                  <span>预计完成时间</span>
+                  <strong id="expected-end">开始在线后计算</strong>
+                  <small id="expected-label">根据当前状态估算</small>
+                </div>
+                <div class="metric-row">
+                  <span>已用挂起</span>
+                  <strong id="hold-duration">00:00:00</strong>
+                  <small id="hold-label">今日累计</small>
+                </div>
+                <div class="metric-row metric-row-alert" id="hold-remaining-row">
+                  <span>挂起参考余量</span>
+                  <strong id="hold-remaining">01:00:00</strong>
+                  <small id="hold-remaining-label">可安排休息</small>
+                </div>
+              </div>
+            </section>
+            <section class="panel timeline-panel">
+              <div class="panel-header compact">
+                <div>
+                  <div class="section-kicker">时间记录</div>
+                  <h2>今日状态时间轴</h2>
+                </div>
+                <span class="muted" id="last-action">暂无状态变化</span>
+              </div>
+              <div class="timeline" id="timeline"></div>
+            </section>
+          </div>
+
+          <section class="notice-strip" id="day-notice">
+            <div>
+              <strong id="notice-title">今天是工作日</strong>
+              <span id="notice-text">开始在线后，系统会自动记录有效在线时长。</span>
+            </div>
+            <button class="text-button" data-view="settings">调整班次</button>
+          </section>
+        </section>
+
+        <section class="view" id="view-stats">
+          <div class="page-heading-row">
+            <div>
+              <div class="section-kicker">数据复盘</div>
+              <h2>统计记录</h2>
+            </div>
+            <button class="primary-button compact-button" id="export-action">导出 Excel</button>
+          </div>
+          <div class="segmented-control" role="tablist" aria-label="统计范围">
+            <button class="segment is-active" data-range="week">本周</button>
+            <button class="segment" data-range="month">本月</button>
+            <button class="segment" data-range="history">历史</button>
+          </div>
+          <div class="stats-summary" id="stats-summary"></div>
+          <section class="panel table-panel">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>日期</th><th>星期</th><th>班次</th><th>目标在线</th><th>实际在线</th><th>挂起</th><th>结果</th></tr>
+                </thead>
+                <tbody id="stats-table-body"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="view-settings">
+          <div class="page-heading-row">
+            <div>
+              <div class="section-kicker">应用偏好</div>
+              <h2>设置</h2>
+            </div>
+            <span class="muted">修改会自动保存</span>
+          </div>
+
+          <div class="settings-layout">
+            <section class="panel settings-section">
+              <div class="panel-header compact"><div><div class="section-kicker">工作规则</div><h2>目标与班次</h2></div></div>
+              <label class="field-label" for="target-minutes">每日目标在线时长</label>
+              <div class="input-with-suffix"><input id="target-minutes" type="number" min="1" max="1440" step="1" /><span>分钟</span></div>
+              <div class="settings-divider"></div>
+              <div class="field-label">每周班次安排</div>
+              <div class="schedule-list" id="schedule-list"></div>
+              <div class="settings-divider"></div>
+              <div class="field-label">每日班次导入</div>
+              <div class="import-toolbar">
+                <button class="secondary-button" id="download-shift-template">下载模板</button>
+                <label class="file-button">选择 CSV 文件<input id="shift-import-input" type="file" accept=".csv,text/csv" /></label>
+              </div>
+              <div class="import-status" id="import-status">支持日期、班次名称、开始时间、结束时间和目标在线分钟。</div>
+              <div class="settings-divider"></div>
+              <div class="field-label">自定义班次</div>
+              <div class="custom-shift-form">
+                <input id="new-shift-name" placeholder="班次名称" maxlength="12" />
+                <input id="new-shift-start" type="time" value="09:00" />
+                <input id="new-shift-end" type="time" value="18:00" />
+                <button class="secondary-button" id="add-shift-action">添加</button>
+              </div>
+              <div class="custom-shift-list" id="custom-shift-list"></div>
+            </section>
+
+            <section class="panel settings-section">
+              <div class="panel-header compact"><div><div class="section-kicker">显示与提醒</div><h2>使用偏好</h2></div></div>
+              <div class="setting-line"><div><strong>主题</strong><small>选择应用的显示方式</small></div><select id="theme-select"><option value="system">跟随系统</option><option value="light">浅色</option><option value="dark">深色</option></select></div>
+              <div class="setting-line"><div><strong>班次提示</strong><small>每天打开应用时显示今日班次</small></div><label class="switch"><input type="checkbox" id="shift-prompt-toggle" /><span></span></label></div>
+              <div class="setting-line"><div><strong>班次外补时</strong><small>允许班次结束后继续累计在线</small></div><label class="switch"><input type="checkbox" id="after-shift-toggle" /><span></span></label></div>
+              <div class="setting-line"><div><strong>悬浮窗</strong><small>保持小窗口显示核心计时</small></div><label class="switch"><input type="checkbox" id="floating-toggle" /><span></span></label></div>
+              <div class="settings-divider"></div>
+              <div class="setting-note"><strong>数据位置</strong><span>保存在当前浏览器的本地存储中。封装为 Windows 应用后将迁移到本机应用数据目录。</span></div>
+              <button class="danger-button" id="reset-data-action">清空本地记录</button>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>

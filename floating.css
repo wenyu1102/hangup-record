@@ -1,0 +1,12 @@
+:root { color-scheme: light; --bg: #ffffff; --line: #d9e2ec; --text: #172535; --muted: #68788b; --blue: #1e6fb6; --blue-soft: #e5f1fb; --orange: #bf6c20; --orange-soft: #fff0df; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 280px; background: var(--bg); color: var(--text); font-family: "Segoe UI", "Microsoft YaHei", sans-serif; }
+.floating-shell { padding: 15px 17px 17px; }
+header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+header strong { font-size: 14px; }
+header button { border: 0; background: transparent; color: var(--muted); font-size: 12px; cursor: pointer; }
+.floating-status { color: var(--blue); background: var(--blue-soft); border-radius: 5px; padding: 7px 9px; margin-top: 13px; font-size: 12px; }
+.floating-duration { font-size: 29px; font-weight: 650; letter-spacing: .02em; margin-top: 17px; }
+.floating-meta { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); font-size: 11px; margin-top: 5px; }
+.floating-action { width: 100%; border: 0; border-radius: 5px; background: var(--blue); color: #fff; padding: 10px; margin-top: 16px; cursor: pointer; font-weight: 650; }
+.floating-action.is-hold { background: var(--orange); }

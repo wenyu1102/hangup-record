@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>挂起记录</title>
+    <link rel="stylesheet" href="floating.css" />
+  </head>
+  <body>
+    <main class="floating-shell">
+      <header><strong>挂起记录</strong><button id="close-floating" title="关闭悬浮窗">关闭</button></header>
+      <div class="floating-status" id="floating-status">尚未开始</div>
+      <div class="floating-duration" id="floating-online">00:00:00</div>
+      <div class="floating-meta"><span id="floating-remaining">还需 07:30:00</span><span id="floating-hold">挂起 00:00:00</span></div>
+      <button class="floating-action" id="floating-action">开始在线</button>
+    </main>
+    <script src="floating.js"></script>
+  </body>
+</html>
